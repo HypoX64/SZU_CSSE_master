@@ -1,9 +1,11 @@
+# 实验记录
 ###  2-1 察看HelloWorld-gechar 的三个进程<br>
 ```bash
-ps -aux |grep HelloWorld
+ps -aux | grep HelloWorld
 ```
-3个进程的PIsssD分别是26608 26649 26689<br>
+3个进程的PID分别是26608 26649 26689<br>
 ![image](./record/pic/2-1.jpg)
+
 ### 2-2 屏显 HelloWorld 可执行文件信息<br>
 ```bash
 file HelloWorld
@@ -42,7 +44,7 @@ shell-script
 1.查找进程的PID<br>
 2.kill PID <br>
 ```bash
-ps -ef |grep HelloWorld-getchar
+ps -ef | grep HelloWorld-getchar
 ```
 ![image](./record/pic/2-6.png)
 ### 2-7 fork-demo 的输出
@@ -80,3 +82,65 @@ fork 函数被成功调用后将按照父进程的样子复制出一个完全相
 ### 2-14&2-15 pthread-demo 的输出及ps –aLf 的输出
 ![image](./record/pic/2-14&2-15.png)
 两个线程公用一个PID号19392，但是LWP却不一样。
+
+### 2-16&2-17 PCB 开销
+```bash
+cat /proc/slabinfo | grep task_struct
+```
+比较两者在进程控制块上的开销(包括 struct task_struct 和内核栈)
+2-16 fork-100-demo 运行前后的/proc/slabinfo 中关于 task_struct 数量
+![image](./record/pic/2-16.png)
+2-17 pthread-100-demo 运行前后的/proc/slabinfo 中关于 task_struct 数量
+![image](./record/pic/2-17.png)
+两者在运行后的task_struct数量均增加100，说明线程作为调度执行单位,进程控制块PCB(task_struct)还是需要的,这是最小资源的一部分。因此这方面资源开销对进程和线程都是一样的。
+### 2-18&2-19&2-20&2-21内存描述符开销
+* 查看mm_struct数量
+```bash
+cat /proc/slabinfo | grep mm_struct
+```
+2-18 fork-100-demo 运行前后的/proc/slabinfo 中关于 mm_struct 数量
+![image](./record/pic/2-18.png)
+2-19 pthread-100-demo 运行前后的/proc/slabinfo 中关于 mm_struct 数量
+![image](./record/pic/2-19.png)
+前者运行时mm_struct数量增加了100，而后者没有变化，说明，pthread-100-demo 虽然创建了 100 个线程,但是用于共享进程空间,并没有增加一个 mm_struct
+* 查看vm_area_struct数量
+```bash
+cat /proc/slabinfo | grep vm_area_struct
+```
+2-20 fork-100-demo 运行前后的/proc/slabinfo 中关于 vm_area_struct 数量
+![image](./record/pic/2-20.png)
+2-21 pthread-100-demo 运行前后的/proc/slabinfo 中关于 vm_area_struct 数量
+![image](./record/pic/2-21.png)
+可以发现pthread-100-demo需要新增大约 150 左右的使用量，而fork-100-demo需要约 1300 左右的使用量，故线程的开销确实比进程要小。
+
+# 课后作业
+### 1.编写 C 语言程序,利用 fork()创建子进程,形成以下父子关系:并通过 ps 命令检查进程的进程号 PID 和父进程号 PPID 证明你成功创建相应的父子关系,同时也用 pstree 输出进程树结构来验证其关系。
+![image](./homework/pic/problem_1.png)
+* 解答：
+* (1).[code](./homework/code/1_topology_1.c)
+ ![image](./homework/pic/1_topology_1.png)
+可以看到父进程12232拥有10个子进程且满足题目的要求
+* (2).[code](./homework/code/1_topology_2.c)
+ ![image](./homework/pic/1_topology_2.png)
+可以看到父进程13738拥有10个子进程且满足题目的要求
+* (3).[code](./homework/code/1_topology_3.c)
+ ![image](./homework/pic/1_topology_3.png)
+可以看子进程结构满足题目要求。
+### 3.创建多个线程,在各个线程中打印出堆栈变量的地址,大致标记出其位置,注意区分主线程的堆栈和其他线程堆栈位置的差异。
+* 解答：[code](./homework/code/3_pthread.c)
+注意：编译时需要链接文件-lpthread -rdynamic
+```bash
+gcc ./3_pthread.c -lpthread -rdynamic -o 3_pthread
+```
+ ![image](./homework/pic/3_pthread.png)
+ 程序中有一个父线程以及3个子线程，可以发现子线程的偏移地址以及返回地址都是一样的，且斗与父线程不一样。
+
+ ### 4.尝试自行设计一个 C 语言小程序,完成最基本的 shell 角色:给出命令行提示符、能够接受命令;对于命令分成三种,内部命令(例如 help 命令、exit 命令等)、外部命令(常见的 ls、cp 等,以及其他磁盘上的可执行程序 HelloWrold 等)以及无效命令(不是上述两种命令)。
+ * 解答：[code](./homework/code/shell.c)
+![image](./homework/pic/4_shell.png)
+
+捕获键盘输入->判断是那种命令->
+* 1.内部命令:打印help文件或exit(0);退出<br>
+* 2.外部命令,fork出新的进程并使用execvp函数执行
+* 3.可执行程序,与外部命令方法相同
+* 4.无效命令：打印无效警告
