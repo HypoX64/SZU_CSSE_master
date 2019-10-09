@@ -89,3 +89,63 @@ cat /proc/15363/stat
 sudo taskset -c 0 ./RR-FIFO.sh
 ```
 经过多次测试发现实验结果无法在ubuntu18.04 多核处理(非虚拟机)器下复现
+
+
+
+```bash
+# cat ./sched-10044; cat ./sched-10045; cat ./sched-10047
+RR-FIFO-sched (10044, #threads: 1)
+-------------------------------------------------------------------
+se.exec_start                                :       1473599.031275
+se.vruntime                                  :             0.418531
+se.sum_exec_runtime                          :         18913.682586
+se.nr_migrations                             :                    0
+nr_switches                                  :                  199
+nr_voluntary_switches                        :                    1
+nr_involuntary_switches                      :                  198
+se.load.weight                               :                 1024
+policy                                       :                    2
+prio                                         :                    9
+clock-delta                                  :                   30
+mm->numa_scan_seq                            :                    0
+numa_migrations, 0
+numa_faults_memory, 0, 0, 1, 0, -1
+numa_faults_memory, 1, 0, 0, 0, -1
+Thu Oct 10 00:39:52 CST 2019
+RR-FIFO-sched (10045, #threads: 1)
+-------------------------------------------------------------------
+se.exec_start                                :       1474798.304037
+se.vruntime                                  :             0.529281
+se.sum_exec_runtime                          :         18889.077331
+se.nr_migrations                             :                    0
+nr_switches                                  :                  200
+nr_voluntary_switches                        :                    1
+nr_involuntary_switches                      :                  199
+se.load.weight                               :                 1024
+policy                                       :                    2
+prio                                         :                    9
+clock-delta                                  :                   30
+mm->numa_scan_seq                            :                    0
+numa_migrations, 0
+numa_faults_memory, 0, 0, 1, 0, -1
+numa_faults_memory, 1, 0, 0, 0, -1
+Thu Oct 10 00:39:53 CST 2019
+RR-FIFO-sched (10047, #threads: 1)
+-------------------------------------------------------------------
+se.exec_start                                :       1441128.799297
+se.vruntime                                  :             0.601009
+se.sum_exec_runtime                          :         18957.767662
+se.nr_migrations                             :                    0
+nr_switches                                  :                   26
+nr_voluntary_switches                        :                    1
+nr_involuntary_switches                      :                   25
+se.load.weight                               :                 1024
+policy                                       :                    1
+prio                                         :                    4
+clock-delta                                  :                   30
+mm->numa_scan_seq                            :                    0
+numa_migrations, 0
+numa_faults_memory, 0, 0, 1, 0, -1
+numa_faults_memory, 1, 0, 0, 0, -1
+Thu Oct 10 00:39:19 CST 2019
+```

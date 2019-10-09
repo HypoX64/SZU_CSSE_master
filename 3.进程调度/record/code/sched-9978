@@ -1,0 +1,18 @@
+RR-FIFO-sched (9978, #threads: 1)
+-------------------------------------------------------------------
+se.exec_start                                :       1339893.754405
+se.vruntime                                  :             0.091420
+se.sum_exec_runtime                          :         18937.981656
+se.nr_migrations                             :                    0
+nr_switches                                  :                  216
+nr_voluntary_switches                        :                    1
+nr_involuntary_switches                      :                  215
+se.load.weight                               :                 1024
+policy                                       :                    2
+prio                                         :                    9
+clock-delta                                  :                   30
+mm->numa_scan_seq                            :                    0
+numa_migrations, 0
+numa_faults_memory, 0, 0, 1, 0, -1
+numa_faults_memory, 1, 0, 0, 0, -1
+Thu Oct 10 00:37:38 CST 2019
