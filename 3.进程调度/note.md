@@ -85,67 +85,65 @@ cat /proc/15363/stat
 
 ![image](./record/pic/3-16d.png)<br>
 
+#### 3-17 创建实时进程
 ```bash
 sudo taskset -c 0 ./RR-FIFO.sh
 ```
-经过多次测试发现实验结果无法在ubuntu18.04 多核处理(非虚拟机)器下复现
+经过多次测试发现实验结果无法在ubuntu18.04 多核处理(非虚拟机)器下复现,故改用centOS7进行实验<br>
+top 命令查看高优先级实时进程10047 抢占 CPU
+![image](./record/pic/3-17a.png)
+![image](./record/pic/3-17b.png)
+![image](./record/pic/3-17c.png)
 
-
-
+3-17 运行脚本并查看三个实时进程的调度信息
 ```bash
 # cat ./sched-10044; cat ./sched-10045; cat ./sched-10047
 RR-FIFO-sched (10044, #threads: 1)
 -------------------------------------------------------------------
-se.exec_start                                :       1473599.031275
-se.vruntime                                  :             0.418531
-se.sum_exec_runtime                          :         18913.682586
-se.nr_migrations                             :                    0
-nr_switches                                  :                  199
-nr_voluntary_switches                        :                    1
 nr_involuntary_switches                      :                  198
 se.load.weight                               :                 1024
 policy                                       :                    2
 prio                                         :                    9
-clock-delta                                  :                   30
-mm->numa_scan_seq                            :                    0
-numa_migrations, 0
-numa_faults_memory, 0, 0, 1, 0, -1
-numa_faults_memory, 1, 0, 0, 0, -1
-Thu Oct 10 00:39:52 CST 2019
-RR-FIFO-sched (10045, #threads: 1)
 -------------------------------------------------------------------
-se.exec_start                                :       1474798.304037
-se.vruntime                                  :             0.529281
-se.sum_exec_runtime                          :         18889.077331
-se.nr_migrations                             :                    0
-nr_switches                                  :                  200
-nr_voluntary_switches                        :                    1
 nr_involuntary_switches                      :                  199
 se.load.weight                               :                 1024
 policy                                       :                    2
 prio                                         :                    9
-clock-delta                                  :                   30
-mm->numa_scan_seq                            :                    0
-numa_migrations, 0
-numa_faults_memory, 0, 0, 1, 0, -1
-numa_faults_memory, 1, 0, 0, 0, -1
-Thu Oct 10 00:39:53 CST 2019
-RR-FIFO-sched (10047, #threads: 1)
 -------------------------------------------------------------------
-se.exec_start                                :       1441128.799297
-se.vruntime                                  :             0.601009
-se.sum_exec_runtime                          :         18957.767662
-se.nr_migrations                             :                    0
-nr_switches                                  :                   26
-nr_voluntary_switches                        :                    1
 nr_involuntary_switches                      :                   25
 se.load.weight                               :                 1024
 policy                                       :                    1
 prio                                         :                    4
-clock-delta                                  :                   30
-mm->numa_scan_seq                            :                    0
-numa_migrations, 0
-numa_faults_memory, 0, 0, 1, 0, -1
-numa_faults_memory, 1, 0, 0, 0, -1
-Thu Oct 10 00:39:19 CST 2019
 ```
+#### 3-20  ~ 3-26  CFS 进程的负载均衡
+执行 HelloWorld-loop-nice+5/+15 并查看它们的负载权重.
+![image](./record/pic/3-18.png)
+可以发现负载权重相差了3*3=9倍
+
+3-20 显示进程所在处理器编号的 top 输出
+top命令后按 f 进入管理界面根据提示操作打开Last  Used Cpu
+![image](./record/pic/3-20.png)
+
+3-21 空闲系统上的即时负载情况
+![image](./record/pic/3-21.png)
+
+3-22 用 top 查看四个 NICE=-5 的进程所在 CPU
+![image](./record/pic/3-22.png)
+可以发现４个进程被分配在４个不同的CPU核心上运行
+
+3-23 察看运行-5/0/+5/+10 四个进程后各处理器负载
+![image](./record/pic/3-23.png)
+
+3-24 从/proc/PID/sched 中查看进程的迁移次数
+处理的进程数小于等于处理器核心数，基本不会进行调度
+![image](./record/pic/3-24.png)
+
+3-25 用 top 查看五个进程的处理器编号
+在这个情况下处理的进程数大于处理器核心数，故会不断进行调度
+![image](./record/pic/3-25a.png)
+![image](./record/pic/3-25b.png)
+![image](./record/pic/3-25c.png)
+
+3-26 用/proc/PID/sched 查看进程迁移次数
+![image](./record/pic/3-26.png)
+
