@@ -6,7 +6,7 @@
 
 int main(int argc,char **argv)
 {
-        sem_t *sem;
+    sem_t *sem;
         if(argc!=2)
     {
         printf("please input a file name to act as the ID of the sem!\n");

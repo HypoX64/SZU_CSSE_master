@@ -21,7 +21,7 @@ int main ( int argc, char *argv[] )
     system("ipcs -m");
     printf("The string in SHM is :%s\n",shm_buf); //将共享内存区的内容打印出来
     getchar();
-    if ( (shmdt(shm_buf)) < 0 ) {
+    if ( (shmdt(shm_buf)) < 0 ) { //解除共享内存的映射
         perror ( "shmdt");
         exit(1);
     }
