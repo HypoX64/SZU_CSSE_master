@@ -169,3 +169,84 @@ POSIX 无名信号量适用于线程间通信,如果无名信号量要用于进�
 (在新版本gcc中mutex m;应改为pthread_mutex_t m;)
 ![image](./record/pic/4-14.png)
 
+# 课后作业
+#### 1.设计编写以下程序,着重考虑其通信和同步问题:
+* a)一个程序(进程)从命令行读入按键信息,一次将“一整行”按键信息保存到一个共享存储的缓冲区内并等待读取进程将数据读走,不断重复上面的操作;
+* b)另一个程序(进程)生成两个进程/线程用于显示缓冲区内的信息,这两个线程并发读取缓冲区信息后将缓冲区清空(一个线程的两次“读取+ 显示”操作之间可以加入适当的时延以便于观察)。
+* c)在两个独立的终端窗口上分别运行上述两个程序,展示其同步与通信功能,要求一次
+只有一个任务在操作缓冲区。
+* d) 运行程序,记录操作过程的截屏并给出文字说明。
+* 要求使用 posix 信号量来完成这里的生产者和消费者的同步关系。
+
+解答:
+对于本题，编写了两个程序，分别是Comsumer.c与Producer.c
+Comsumer.c将创建共享内存区与一个信号量并不断的检测键盘输入，当有键盘输入且信号量为０的时候将键入内容复制到共享内存区，并对信号量加１
+Producer.c被fork为两个线程，不断的检测信号量，若为１则读取内存缓存区并显示，然后对信号量减１
+![image](./homework/Producer_Comsumer.png)
+
+#### 2.将 2.6 的练习 3 进行扩展,使得你编写的 shell 程序具有支持管道的功能,也就是说你的shell 中输入“dir | more”能够执行 dir 命令并通过管道将其输入传送给 more
+解答：
+1.创建pipe
+2.fork两个子进程执行dir和more命令
+3.把dir子进程的标准输出、标准错误重定向到管道数据入口
+4.把more子进程的标准输入重定向到管道数据出口
+
+![image](./homework/shell_with_pipe.png)
+[参考资料1](https://blog.csdn.net/weixin_34197488/article/details/93652978)
+[参考资料2](http://www.it1352.com/485628.html)
+[参考资料3](https://blog.csdn.net/tiandc/article/details/81489447)
+实现函数:
+
+```c
+int pipe_shell(char **args1, char **args2)
+{
+    int pfds[2];
+    pid_t pid1, pid2, wpid;
+    pipe(pfds);
+    char buf[1024];
+    int nwr = 0;
+    int status;
+    pid1 = fork();
+    if (pid1 < 0) 
+    {
+        printf("fork error!\n");
+    } 
+    else if (pid1 == 0)
+     {      
+        // STDIN_FILENO：接收键盘的输入
+        // STDOUT_FILENO：向屏幕输出
+        // dup2 把 pfds[1](管道数据入口描述符) 复制到 文件描述符1&2
+        // 实现把pid1的标准输出和标准错误 输送到管道      
+        dup2(pfds[1], STDOUT_FILENO);
+        dup2(pfds[1], STDERR_FILENO);
+        close(pfds[0]);
+        close(pfds[1]);
+        char *args[]={"ls",NULL};
+        execvp(args1[0], args1);
+        exit(0);
+    }
+    pid2 = fork();
+    if (pid2< 0) 
+    {
+        printf("error!\n");
+    } 
+    else if (pid2 == 0){ 
+        //dup2 把 pfds[0](管道数据出口描述符) 复制到 文件描述符0
+        //实现pid2从管道中读取(pid1的输出)数据        
+        dup2(pfds[0], STDIN_FILENO);
+        close(pfds[0]);
+        close(pfds[1]);
+        char *args[]={"more",NULL};
+        execvp(args2[0], args2);
+        exit(0);
+    }
+    close(pfds[0]);
+    close(pfds[1]);
+    do 
+    {
+        wpid = waitpid(pid2,&status,WUNTRACED);
+    }
+    while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    return 1;
+}
+```

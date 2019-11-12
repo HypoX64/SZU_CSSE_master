@@ -137,8 +137,6 @@ int pipe_shell(char **args1, char **args2)
     return 1;
 }
 
-
-
 int shell(char **args){
     pid_t pid,wpid;
     int status;
