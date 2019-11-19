@@ -92,13 +92,72 @@ VmSize:虚存总量 的变化——从少到多然后再下降
 VmPeak:记录着该进程历史上曾获得的最高虚存总量
 VmData:数据区 
 
-### 5.1.3. 文件映射区
+### 5.1.3  文件映射区
 mmap()可以完成内存映射文件的操作
 解除映射的函数为 munmap()
 ```c
 #include <sys/mman.h>
 void *mmap(void *start, size_t length, int prot, int flags, int fd, off_t offset);
 int munmap(void *start, size_t length);
+```
+* 屏显 5-8 mmap-demo 的输出
+![image](./record/pic/5-8.png)
+* 屏显 5-9 /proc/PID/maps 中的文件映射信息
+```bash
+hypo@hypo-CW65S:$ ps -aux | grep mmap
+hypo      3076  0.0  0.0   4508   740 pts/0    S+   20:52   0:00 ./mmap-demo
+hypo      3115  0.0  0.0  21532  1012 pts/1    S+   20:53   0:00 grep --color=auto mmap
+hypo@hypo-CW65S:$ cat /proc/3076/maps
+.....
+7f2c49815000-7f2c49816000 rw-s 00000000 08:01 615399              file-mapped.txt
+......
+(hypo@hypo-CW65S:$ ls -i file-mapped.txt
+615399 file-mapped.txt
+```
+* 屏显 5-10 被修改后的 file-mmaped.txt 文件内容
+```bash
+hypo@hypo-CW65S:$ cat file-mapped.txt
+Modification in the memory---------e-mmapped buffer!
+And this is the second line.
+This is the last line!
+```
+
+### 5.1.4 栈区
+#### 主线程栈区
+每一次函数调用所扩展出来的堆栈空间被称为一个栈帧,因此随着函数的调用层次加深,堆栈的栈顶会随着栈帧的叠加而逐步扩展。函数调用时的返回地址、栈帧指针和函数内部的局部数据(也称堆栈变量、自动变量)都保存在堆栈中的某个栈帧结构上。
+* 屏显 5-11 stack-demo 运行输出
+![image](./record/pic/5-11.png)
+
+* 屏显 5-12 /proc/PID/maps 展示的堆栈变化
+```bash
+#begin
+7ffe5f0e5000-7ffe5f106000 rw-p 00000000 00:00 0                          [stack]
+#第 1 层调用
+7ffe5f0c3000-7ffe5f106000 rw-p 00000000 00:00 0                          [stack]
+#第 2层调用
+7ffe5f083000-7ffe5f106000 rw-p 00000000 00:00 0                          [stack]
+#第 3层调用
+7ffe5f043000-7ffe5f106000 rw-p 00000000 00:00 0                          [stack]
+#第 3层调用
+7ffe5f043000-7ffe5f106000 rw-p 00000000 00:00 0                          [stack]
+#第 2层调用
+7ffe5f043000-7ffe5f106000 rw-p 00000000 00:00 0                          [stack]
+#第 1 层调用
+7ffe5f043000-7ffe5f106000 rw-p 00000000 00:00 0                          [stack]
+```
+#### 线程栈
+* 屏显 5-13 pthread-stack-demo 的运行结果
+![image](./record/pic/5-13.png)
+
+* 屏显 5-14 创建线程后的内存布局
+```bash
+#线 程 创 建 前
+7ff695103000-7ff695104000 rw-p 00000000 00:00 0 
+7ffd7f003000-7ffd7f024000 rw-p 00000000 00:00 0                          [stack]
+#线 程 创 建 后
+7ff695103000-7ff695104000 rw-p 00000000 00:00 0 
+7ffd7f003000-7ffd7f024000 rw-p 00000000 00:00 0                          [stack]
+#在ubuntu18.04中并没有观察到出现两个stack
 ```
 # 课后作业
 #### 1.设计编写以下程序,着重考虑其通信和同步问题:
