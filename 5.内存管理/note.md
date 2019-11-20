@@ -1,5 +1,5 @@
 # 实验记录
-### 5.1.1. 进程映像
+### 5.1.1 进程映像
 * 屏显 5-1 HelloWorld-getchar 的内存布局
 ![image](./record/pic/5-1.png)
 每一行是一个具有特定属性的连续的内存区,每行的开头是该区间的地址范围。后面的 rxwp 分别代表:r=可读、w=可写、x=可执行、s=共享以及 p=私有,再后面一列的数字用于表示文件映射内存对应于文件中的起始位置(如果不是文件映射区则为 0)。
@@ -159,6 +159,54 @@ This is the last line!
 7ffd7f003000-7ffd7f024000 rw-p 00000000 00:00 0                          [stack]
 #在ubuntu18.04中并没有观察到出现两个stack
 ```
+
+### 5.1.4 访问任意进程的虚存
+系统中有多个并发的进程存在,每个进程的虚存空间是独立的,除非映射了共享内存否则无法相互访问。进程通常只能通过/proc/self/mem 读取本进程内存的数据,但。 root 用户启动的进程可以不需要通过 ptrace 也能查看其他进程的内存空间,只要求被查看的进程处于不运行状态。
+* 屏显 5-15 /proc/PID/mem 访问权限
+![image](./record/pic/5-15.png)
+* 屏显 5-16 show-var-addr 的输出
+![image](./record/pic/5-16.png)
+* 屏显 5-17 read-proc-mem 的输出
+![image](./record/pic/5-17.png)
+在16gb内存的ubuntu18.04操作系统下原代码运行失败，lseek64函数无法定位文件
+
+### 5.1.6  虚存使用的物理页帧
+
+```bash
+cat /proc/PID/smaps #给出了 HelloWorld-gechar 进程各个虚存段使用物理页帧的情况
+```
+* 屏显 5-18 /proc/PID/smaps 的部分内容
+```bash
+hypo@hypo-CW65S:$ cat /proc/19361/smaps
+55a323dda000-55a323ddb000 r-xp 00000000 08:01 615382                     HelloWorld-getchar
+Size:                  4 kB
+
+......
+
+SwapPss:               0 kB
+Locked:                0 kB
+THPeligible:    0
+VmFlags: rd ex 
+```
+
+### 5.2.1  分页机制
+1.每个处理器核上运行的进程使用的是虚地址,每次取指令或数据都需要将程序虚地址转换成物理地址,这需要借助于页表信息来转换.
+### 5.2.2  进程页表
+* 屏显 5-19 show-virt-addr 的输出
+![image](./record/pic/5-19.png)
+译后运行 show-virt-addr,打印出“Hello world!”字符串的虚地址 0x561a250f1754
+* 屏显 5-20 crash 启动信息
+```bash
+
+
+```
+
+
+
 # 课后作业
 #### 1.设计编写以下程序,着重考虑其通信和同步问题:
 
+
+```
+
+```
