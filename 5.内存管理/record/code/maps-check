@@ -1,0 +1,21 @@
+00400000-00401000 r-xp 00000000 fd:00 52072941                           /home/hypo/linux-homework/5.内存管理/record/code/reclaim-swap-writeback-demo
+00600000-00601000 r--p 00000000 fd:00 52072941                           /home/hypo/linux-homework/5.内存管理/record/code/reclaim-swap-writeback-demo
+00601000-00602000 rw-p 00001000 fd:00 52072941                           /home/hypo/linux-homework/5.内存管理/record/code/reclaim-swap-writeback-demo
+7fe7196da000-7fe7196df000 rw-p 00000000 00:00 0 
+7fe7196df000-7fe71a6db000 rw-p 00000000 00:00 0 
+7fe71a6db000-7fe71a6dd000 rw-s 00000000 fd:00 244                        /home/hypo/tempfile
+7fe71a6dd000-7fe71aedb000 rw-s 00002000 fd:00 244                        /home/hypo/tempfile
+7fe71aedb000-7fe71b09d000 r-xp 00000000 fd:00 364328                     /usr/lib64/libc-2.17.so
+7fe71b09d000-7fe71b29d000 ---p 001c2000 fd:00 364328                     /usr/lib64/libc-2.17.so
+7fe71b29d000-7fe71b2a1000 r--p 001c2000 fd:00 364328                     /usr/lib64/libc-2.17.so
+7fe71b2a1000-7fe71b2a3000 rw-p 001c6000 fd:00 364328                     /usr/lib64/libc-2.17.so
+7fe71b2a3000-7fe71b2a8000 rw-p 00000000 00:00 0 
+7fe71b2a8000-7fe71b2ca000 r-xp 00000000 fd:00 2765112                    /usr/lib64/ld-2.17.so
+7fe71b4b1000-7fe71b4b4000 rw-p 00000000 00:00 0 
+7fe71b4c7000-7fe71b4c9000 rw-p 00000000 00:00 0 
+7fe71b4c9000-7fe71b4ca000 r--p 00021000 fd:00 2765112                    /usr/lib64/ld-2.17.so
+7fe71b4ca000-7fe71b4cb000 rw-p 00022000 fd:00 2765112                    /usr/lib64/ld-2.17.so
+7fe71b4cb000-7fe71b4cc000 rw-p 00000000 00:00 0 
+7ffdd65ed000-7ffdd660e000 rw-p 00000000 00:00 0                          [stack]
+7ffdd664c000-7ffdd664e000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]

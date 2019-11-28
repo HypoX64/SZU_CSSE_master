@@ -1,0 +1,357 @@
+00400000-00401000 r-xp 00000000 fd:00 52072941                           /home/hypo/linux-homework/5.内存管理/record/code/reclaim-swap-writeback-demo
+Size:                  4 kB
+Rss:                   4 kB
+Pss:                   4 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         4 kB
+Private_Dirty:         0 kB
+Referenced:            4 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd ex mr mp me dw sd 
+00600000-00601000 r--p 00000000 fd:00 52072941                           /home/hypo/linux-homework/5.内存管理/record/code/reclaim-swap-writeback-demo
+Size:                  4 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  4 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd mr mp me dw ac sd 
+00601000-00602000 rw-p 00001000 fd:00 52072941                           /home/hypo/linux-homework/5.内存管理/record/code/reclaim-swap-writeback-demo
+Size:                  4 kB
+Rss:                   4 kB
+Pss:                   4 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         4 kB
+Private_Dirty:         0 kB
+Referenced:            4 kB
+Anonymous:             4 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me dw ac sd 
+7fe7196da000-7fe7196df000 rw-p 00000000 00:00 0 
+Size:                 20 kB
+Rss:                  20 kB
+Pss:                  20 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:        20 kB
+Referenced:           20 kB
+Anonymous:            20 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:               20 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me lo ac sd 
+7fe7196df000-7fe71a6db000 rw-p 00000000 00:00 0 
+Size:              16368 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:               9348 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me ac sd 
+7fe71a6db000-7fe71a6dd000 rw-s 00000000 fd:00 244                        /home/hypo/tempfile
+Size:                  8 kB
+Rss:                   8 kB
+Pss:                   8 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         8 kB
+Private_Dirty:         0 kB
+Referenced:            8 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                8 kB
+ProtectionKey:         0
+VmFlags: rd wr sh mr mp me ms lo sd 
+7fe71a6dd000-7fe71aedb000 rw-s 00002000 fd:00 244                        /home/hypo/tempfile
+Size:               8184 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr sh mr mp me ms sd 
+7fe71aedb000-7fe71b09d000 r-xp 00000000 fd:00 364328                     /usr/lib64/libc-2.17.so
+Size:               1800 kB
+Rss:                  48 kB
+Pss:                   9 kB
+Shared_Clean:         40 kB
+Shared_Dirty:          0 kB
+Private_Clean:         8 kB
+Private_Dirty:         0 kB
+Referenced:           48 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd ex mr mp me sd 
+7fe71b09d000-7fe71b29d000 ---p 001c2000 fd:00 364328                     /usr/lib64/libc-2.17.so
+Size:               2048 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: mr mp me sd 
+7fe71b29d000-7fe71b2a1000 r--p 001c2000 fd:00 364328                     /usr/lib64/libc-2.17.so
+Size:                 16 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                 16 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd mr mp me ac sd 
+7fe71b2a1000-7fe71b2a3000 rw-p 001c6000 fd:00 364328                     /usr/lib64/libc-2.17.so
+Size:                  8 kB
+Rss:                   4 kB
+Pss:                   4 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         4 kB
+Referenced:            4 kB
+Anonymous:             4 kB
+AnonHugePages:         0 kB
+Swap:                  4 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me ac sd 
+7fe71b2a3000-7fe71b2a8000 rw-p 00000000 00:00 0 
+Size:                 20 kB
+Rss:                   8 kB
+Pss:                   8 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         4 kB
+Private_Dirty:         4 kB
+Referenced:            8 kB
+Anonymous:             8 kB
+AnonHugePages:         0 kB
+Swap:                  4 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me ac sd 
+7fe71b2a8000-7fe71b2ca000 r-xp 00000000 fd:00 2765112                    /usr/lib64/ld-2.17.so
+Size:                136 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd ex mr mp me dw sd 
+7fe71b4b1000-7fe71b4b4000 rw-p 00000000 00:00 0 
+Size:                 12 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                 12 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me ac sd 
+7fe71b4c6000-7fe71b4c9000 rw-p 00000000 00:00 0 
+Size:                 12 kB
+Rss:                   4 kB
+Pss:                   4 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         4 kB
+Referenced:            4 kB
+Anonymous:             4 kB
+AnonHugePages:         0 kB
+Swap:                  8 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me ac sd 
+7fe71b4c9000-7fe71b4ca000 r--p 00021000 fd:00 2765112                    /usr/lib64/ld-2.17.so
+Size:                  4 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  4 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd mr mp me dw ac sd 
+7fe71b4ca000-7fe71b4cb000 rw-p 00022000 fd:00 2765112                    /usr/lib64/ld-2.17.so
+Size:                  4 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  4 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me dw ac sd 
+7fe71b4cb000-7fe71b4cc000 rw-p 00000000 00:00 0 
+Size:                  4 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  4 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me ac sd 
+7ffdd65ed000-7ffdd660e000 rw-p 00000000 00:00 0                          [stack]
+Size:                132 kB
+Rss:                  12 kB
+Pss:                  12 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         4 kB
+Private_Dirty:         8 kB
+Referenced:           12 kB
+Anonymous:            12 kB
+AnonHugePages:         0 kB
+Swap:                  4 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd wr mr mp me gd ac 
+7ffdd664c000-7ffdd664e000 r-xp 00000000 00:00 0                          [vdso]
+Size:                  8 kB
+Rss:                   4 kB
+Pss:                   0 kB
+Shared_Clean:          4 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            4 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd ex mr mp me de sd 
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+Size:                  4 kB
+Rss:                   0 kB
+Pss:                   0 kB
+Shared_Clean:          0 kB
+Shared_Dirty:          0 kB
+Private_Clean:         0 kB
+Private_Dirty:         0 kB
+Referenced:            0 kB
+Anonymous:             0 kB
+AnonHugePages:         0 kB
+Swap:                  0 kB
+KernelPageSize:        4 kB
+MMUPageSize:           4 kB
+Locked:                0 kB
+ProtectionKey:         0
+VmFlags: rd ex 
