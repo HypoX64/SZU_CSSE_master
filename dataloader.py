@@ -41,9 +41,12 @@ for i in range(len(colon_indexs)-1):
 # print(descriptions)
 
 
-def normlize(npdata):
+def normlize(npdata,justprice = False):
     _min = np.min(npdata)
     _max = np.max(npdata)
+    if justprice:       
+        _min = 34900.0
+        _max = 755000.0
     return (npdata-_min)/(_max-_min)
 
 def convert2price(tensor):
@@ -130,8 +133,8 @@ def load_all():
     for i in range(description_length):
         desc_all[:,i] = normlize(desc_all[:,i])
     train_price = normlize(train_price)
-    train_desc = desc_all[:1460]
-    test_desc = desc_all[1460:]
+    train_desc = desc_all[:len(train_desc)]
+    test_desc = desc_all[len(train_desc):]
     return train_desc.astype(np.float32),train_price.astype(np.float32),test_desc.astype(np.float32)
 
 def write_csv(prices,path):
@@ -144,9 +147,11 @@ def write_csv(prices,path):
 
 def main():
     train_desc,train_price,test_desc = load_all()
-    print(train_price)
-    write_csv(train_price, './result.csv')
-    # print(data)
+    print(len(test_desc))
+
+
+    # write_csv(train_price, './result.csv')
+    # # print(data)
     # plt.plot(data[1])
     # plt.show()
 if __name__ == '__main__':

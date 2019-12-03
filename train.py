@@ -2,17 +2,16 @@ import numpy as np
 import torch
 import dataloader
 import model
+import evaluation
 from torch import nn, optim
 
 #parameter
 LR = 0.0001
-EPOCHS = 5
-BATCHSIZE = 12
+EPOCHS = 100
+BATCHSIZE = 1
 CONTINUE = False
 use_gpu = True
 SAVE_FRE = 5
-MOD = 'dev'
-print('MOD:', MOD)
 
 
 #train 0:1200    dev 1200:1460    test 1460: 2919
@@ -20,7 +19,7 @@ print('MOD:', MOD)
 train_desc,train_price,test_desc = dataloader.load_all()
 
 #def network
-net = model.Linear(79,256,1)
+net = model.Linear(79,1024,1)
 print(net)
 
 if CONTINUE:
@@ -29,80 +28,52 @@ if use_gpu:
     net.cuda()
     # cudnn.benchmark = True
 
+# optimizer = torch.optim.SGD(net.parameters(), lr=LR )
 optimizer = torch.optim.Adam(net.parameters(), lr=LR )
-# criterion = nn.L1Loss()
 criterion = nn.MSELoss()
 
 
+for epoch in range(EPOCHS):
+    print('Epoch {}/{}.'.format(epoch + 1, EPOCHS))
+    
+    net.train()
+    price_pres = []
+    price_trues = []
+    for i in range(int(len(train_desc)/BATCHSIZE)):
+        desc = np.zeros((BATCHSIZE,79), dtype=np.float32)
+        price = np.zeros((BATCHSIZE,1), dtype=np.float32)
+        for j in range(BATCHSIZE):   
+            desc[j]=train_desc[i*BATCHSIZE+j:i*BATCHSIZE+j+1]
+            price[j]=train_price[i*BATCHSIZE+j:i*BATCHSIZE+j+1]
 
-if MOD == 'dev':
-    dev_avg_loss = []
-    for epoch in range(EPOCHS):
-        print('Epoch {}/{}.'.format(epoch + 1, EPOCHS))
-        net.train()
-        epoch_loss_train = 0
-        for i in range(1200):
-            desc = (train_desc[i]).reshape(1,79)
-            price = (np.array(train_price[i])).reshape(1,1)
-            desc = torch.from_numpy(desc).cuda()
-            price = torch.from_numpy(price).cuda()
+        desc = torch.from_numpy(desc).cuda()
+        price = torch.from_numpy(price).cuda()
 
-            price_pre = net(desc)
-            loss = criterion(price_pre, price)
-            epoch_loss_train += loss.item()
+        price_pre = net(desc)
+        loss = criterion(price_pre, price)
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
 
-        net.eval()
-        epoch_loss_dev = 0
-        for i in range(1200,1460):
-            desc = (train_desc[i]).reshape(1,79)
-            price = (np.array(train_price[i])).reshape(1,1)
-            desc = torch.from_numpy(desc).cuda()
-            price = torch.from_numpy(price).cuda()
+        for j in range(BATCHSIZE):   
+            price_trues.append(dataloader.convert2price(train_price[i*BATCHSIZE+j]))
+            price_pres.append(dataloader.convert2price(price_pre.cpu().detach().numpy()[j][0]))
+    train_loss = evaluation.RMSE(price_trues,price_pres)
 
-            price_pre = net(desc)
-            loss = criterion(price_pre, price)
-            epoch_loss_dev += loss.item()
-            # if epoch == 0:
-            #     print(dataloader.convert2price(price_pre.cpu().detach().numpy()))
 
-        print('--- Epoch train_loss:',epoch_loss_train/1200,'dev_loss:',epoch_loss_dev/260)
-    #     if epoch>=10:
-    #         dev_avg_loss.append(epoch_loss_dev/260)
-    # print('dev_avg_loss:',np.mean(dev_avg_loss))
 
-elif MOD == 'test':
-    dev_avg_loss = []
-    for epoch in range(EPOCHS):
-        print('Epoch {}/{}.'.format(epoch + 1, EPOCHS))
-        net.train()
-        epoch_loss_train = 0
-        for i in range(1460):
-            desc = (train_desc[i]).reshape(1,79)
-            price = (np.array(train_price[i])).reshape(1,1)
-            desc = torch.from_numpy(desc).cuda()
-            price = torch.from_numpy(price).cuda()
+    net.eval()
+    price_pres = []
+    for i in range(len(test_desc)):
+        desc = (test_desc[i]).reshape(1,79)
+        desc = torch.from_numpy(desc).cuda()
+        price_pre = net(desc)
+        price_pres.append(dataloader.convert2price(price_pre.cpu().detach().numpy()[0][0]))
 
-            price_pre = net(desc)
-            loss = criterion(price_pre, price)
-            epoch_loss_train += loss.item()
+    test_loss = evaluation.eval_test(price_pres)
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+    dataloader.write_csv(price_pres, './result_epoch'+str(epoch+1)+'.csv')
 
-        net.eval()
-        epoch_loss_dev = 0
-        price_pres = []
-        for i in range(1459):
-            desc = (test_desc[i]).reshape(1,79)
-            desc = torch.from_numpy(desc).cuda()
-            price_pre = net(desc)
-            price_pres.append(dataloader.convert2price(price_pre.cpu().detach().numpy()[0][0]))
-        dataloader.write_csv(price_pres, './result_epoch'+str(epoch+1)+'.csv')
-
-        print('--- Epoch train_loss:',epoch_loss_train/1460)
+    print('--- Epoch train_loss:',train_loss,' test_loss:',test_loss)
 
