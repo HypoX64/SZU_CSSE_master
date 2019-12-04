@@ -28,7 +28,7 @@ def RMSE(records_real,records_predict):
         return None
 
 def main():
-    my_price = load_submission('./result/0.04145_0.15960.csv')
+    my_price = load_submission('./datasets/sample_submission.csv')
     print(eval_test(my_price))
 if __name__ == '__main__':
     main()

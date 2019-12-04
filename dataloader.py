@@ -1,6 +1,7 @@
 import os
 import csv
 import numpy as np
+import random
 # import matplotlib.pyplot as plt
 
 # load description_txt
@@ -40,6 +41,11 @@ for i in range(len(colon_indexs)-1):
         descriptions.append(mapping)
 # print(descriptions)
 
+def match_random(a,b):
+    state = np.random.get_state()
+    np.random.shuffle(a)
+    np.random.set_state(state)
+    np.random.shuffle(b)
 
 def normlize(npdata,justprice = False):
     _min = np.min(npdata)
