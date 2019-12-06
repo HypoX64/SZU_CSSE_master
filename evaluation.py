@@ -2,6 +2,7 @@ import csv
 import math
 import numpy as np
 import dataloader
+import transformer
 
 def load_submission(path):
     csv_data = []
@@ -19,6 +20,8 @@ def eval_test(records_predict):
     return RMSE(records_real, records_predict)
 
 def RMSE(records_real,records_predict):
+    # records_real = np.log1p(records_real)
+    # records_predict = np.log1p(records_predict)
     records_real = dataloader.normlize(np.array(records_real),True)
     records_predict = dataloader.normlize(np.array(records_predict),True)
     if len(records_real) == len(records_predict):
@@ -28,7 +31,9 @@ def RMSE(records_real,records_predict):
         return None
 
 def main():
-    my_price = load_submission('./datasets/sample_submission.csv')
+    # my_price = load_submission('./datasets/sample_submission.csv')
+    my_price = load_submission('./result/0.03688_0.14435.csv')
+
     print(eval_test(my_price))
 if __name__ == '__main__':
     main()

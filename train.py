@@ -5,7 +5,7 @@ import model
 import evaluation
 from torch import nn, optim
 import time
-
+import transformer
 
 #parameter
 LR = 0.0001
@@ -14,14 +14,14 @@ BATCHSIZE = 64
 CONTINUE = False
 use_gpu = True
 SAVE_FRE = 5
-
+Dimension = 120
 #load data
-train_desc,train_price,test_desc = dataloader.load_all()
+train_desc,train_price,test_desc = dataloader.load_all(Dimension)
 train_desc.tolist()
 train_price.tolist()
 
 #def network
-net = model.Linear(79,256,1)
+net = model.Linear(Dimension,256,1)
 print(net)
 
 if CONTINUE:
@@ -43,9 +43,13 @@ for epoch in range(EPOCHS):
     price_pres = []
     price_trues = []
 
-    dataloader.match_random(train_desc, train_price)
+    transformer.match_random(train_desc, train_price)
+    train_desc = np.array(train_desc)
+    train_price = np.array(train_price)
+    # train_desc = transformer.random_transform(train_desc, 0.02)
+    # train_price = transformer.random_transform(train_price, 0.02)
     for i in range(int(len(train_desc)/BATCHSIZE)):
-        desc = np.zeros((BATCHSIZE,79), dtype=np.float32)
+        desc = np.zeros((BATCHSIZE,Dimension), dtype=np.float32)
         price = np.zeros((BATCHSIZE,1), dtype=np.float32)
         for j in range(BATCHSIZE):   
             desc[j]=train_desc[i*BATCHSIZE+j:i*BATCHSIZE+j+1]
@@ -69,7 +73,7 @@ for epoch in range(EPOCHS):
     net.eval()
     price_pres = []
     for i in range(len(test_desc)):
-        desc = (test_desc[i]).reshape(1,79)
+        desc = (test_desc[i]).reshape(1,Dimension)
         desc = torch.from_numpy(desc).cuda()
         price_pre = net(desc)
         price_pres.append(dataloader.convert2price(price_pre.cpu().detach().numpy()[0][0]))
