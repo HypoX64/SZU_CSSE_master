@@ -1,5 +1,7 @@
 import numpy as np
 
+import pandas as pd
+
 value_map = {}
 value_map["MSSubClass"] = {'180':1, 
                             '30':2, '45':2, 
@@ -110,10 +112,18 @@ def fix_miss(name):
     else:
         return 0
 
-# def fix_LotFrontage(Full_map):
-#     a = np.zeros(25)
-#     for i in range(25):
-#         a[Full_map['Neighborhood'][i]-1] += 
+def fix_LotFrontage(Full_map):
+    data_df = pd.DataFrame(Full_map)
+    data_df["LotFrontage"] = data_df.groupby("Neighborhood")["LotFrontage"].transform(lambda x: x.fillna(x.median()))
+    return data_df["LotFrontage"].to_numpy()
+
+def binary(npdata):
+    for i in range(len(npdata)):
+        if npdata[i]>0:
+            npdata[i] = 1
+        else:
+            npdata[i] = 0
+    return npdata
 
 def add_future(features):
     features["TotalHouse"] = features["TotalBsmtSF"] + features["1stFlrSF"] + features["2ndFlrSF"]   
@@ -141,7 +151,9 @@ def add_future(features):
     features["Rooms"] = features["FullBath"]+features["TotRmsAbvGrd"]
     features["PorchArea"] = features["OpenPorchSF"]+features["EnclosedPorch"]+features["3SsnPorch"]+features["ScreenPorch"]
     features["TotalPlace"] = features["TotalBsmtSF"] + features["1stFlrSF"] + features["2ndFlrSF"] + features["GarageArea"] + features["OpenPorchSF"]+features["EnclosedPorch"]+features["3SsnPorch"]+features["ScreenPorch"]
-    
+    features['all_quality'] = (features['ExterQual'] +features['BsmtFinType1']+features['BsmtFinType2']+
+                            features['KitchenQual']+features['FireplaceQu']+features['GarageQual']+
+                            features['PoolQC']+features['Fence'])
 
     features['YrBltAndRemod']=features['YearBuilt']+features['YearRemodAdd']
     features['TotalSF']=features['TotalBsmtSF'] + features['1stFlrSF'] + features['2ndFlrSF']
@@ -153,11 +165,15 @@ def add_future(features):
     features['Total_porch_sf'] = (features['OpenPorchSF'] + features['3SsnPorch'] +
                                   features['EnclosedPorch'] + features['ScreenPorch'] +
                                   features['WoodDeckSF'])
-    # features['haspool'] = features['PoolArea'].apply(lambda x: 1 if x > 0 else 0)
-    # features['has2ndfloor'] = features['2ndFlrSF'].apply(lambda x: 1 if x > 0 else 0)
-    # features['hasgarage'] = features['GarageArea'].apply(lambda x: 1 if x > 0 else 0)
-    # features['hasbsmt'] = features['TotalBsmtSF'].apply(lambda x: 1 if x > 0 else 0)
-    # features['hasfireplace'] = features['Fireplaces'].apply(lambda x: 1 if x > 0 else 0)
 
 
+    #random features
+    random_list = ['GrLivArea','OverallQual','2ndFlrSF','YearBuilt','1stFlrSF','TotalBsmtSF','OverallCond',
+    'my_Neighborhood','my_SaleCondition','BsmtFinSF1','my_MSZoning','LotArea','GarageCars','YearRemodAdd','GarageArea']
+    length = len(random_list)
+    for i in range(length):
+        for j in range(i,length):
+            if i != j:
+                features[random_list[i]+'*'+random_list[j]]=features[random_list[i]]*features[random_list[j]]
+                
     return features

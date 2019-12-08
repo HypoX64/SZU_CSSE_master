@@ -8,13 +8,13 @@ import time
 import transformer
 
 #parameter
-LR = 0.0001
+LR = 0.001
 EPOCHS = 1000
 BATCHSIZE = 64
 CONTINUE = False
 use_gpu = True
 SAVE_FRE = 5
-Dimension = 120
+Dimension = 128
 #load data
 train_desc,train_price,test_desc = dataloader.load_all(Dimension)
 train_desc.tolist()

@@ -3,11 +3,8 @@ import csv
 import numpy as np
 import random
 from sklearn.decomposition import PCA 
-from sklearn.model_selection import GridSearchCV
-from sklearn.kernel_ridge import KernelRidge
-from sklearn.svm import SVR
 import evaluation
-from description_map import value_map,fix_key,fix_miss,add_future
+from description_map import value_map,fix_key,fix_miss,add_future,fix_LotFrontage
 
 # load description_txt
 description_txt = []
@@ -52,13 +49,6 @@ for i in range(len(colon_indexs)-1):
             ori_map[key] = interspace-j-1 #change word to vector
             Full_map[desc_key]=ori_map
 
-# def normlize(npdata,justprice = False):
-#     _mean = np.mean(npdata)
-#     _std = np.std(npdata)
-#     if justprice:       
-#         _mean = 180921.195
-#         _std = 79415.2918
-#     return (npdata-_mean)/_std
 
 def normlize(npdata,justprice = False):
     _min = np.min(npdata)
@@ -68,8 +58,6 @@ def normlize(npdata,justprice = False):
         _max = 755000.0
     return (npdata-_min)/(_max-_min)
 
-# def convert2price(tensor):
-#     return tensor*79415.2918+180921.195
 
 def convert2price(tensor):
     return tensor*(755000.0-34900.0)+34900
@@ -163,28 +151,32 @@ def dict2numpy(dict_data):
     return np_data
 
 def load_all(dimension):
-    desc_map,price_map = load_train()
-    desc_map = add_future(desc_map)
-    # print(len(desc_map))
-    # print(desc_map)
-    # print(desc_map)
-    train_price = np.array(price_map['price'])
-    train_desc = dict2numpy(desc_map)
 
-    desc_map = load_test()
-    desc_map = add_future(desc_map)
-    test_desc = dict2numpy(desc_map)
+    train_desc_map,train_price_map = load_train()
+    test_desc_map = load_test()
+    desc_map = {}
+    train_length = len(list(train_desc_map.values())[0])
 
-    desc_all = np.concatenate((train_desc,test_desc),axis=0)
-    for i in range(len(desc_all[0])):
-        desc_all[:,i] = normlize(desc_all[:,i])
-    # print(desc_all)
+    for key in train_desc_map.keys():
+        desc_map[key] = np.concatenate((train_desc_map[key],test_desc_map[key]),axis=0)
+        # desc_map[key] = normlize(desc_map[key])
+
+    desc_map['LotFrontage'] = fix_LotFrontage(desc_map)
+    desc_map['YearBuilt'] = (desc_map['YearBuilt']-1800)/10
+    desc_map['YearRemodAdd'] = (desc_map['YearRemodAdd']-1800)/10
+    desc_map = add_future(desc_map)
+
+    for key in desc_map.keys():
+        desc_map[key] = normlize(desc_map[key])
+
+    desc_all = dict2numpy(desc_map)
+
     pca=PCA(n_components=dimension)     #加载PCA算法，设置降维后主成分数目为
     desc_all=pca.fit_transform(desc_all)#对样本进行降维
 
-    train_price = normlize(train_price,True)
-    train_desc = desc_all[:len(train_desc)]
-    test_desc = desc_all[len(train_desc):]
+    train_price = normlize(np.array(train_price_map['price']),True)
+    train_desc = desc_all[:train_length]
+    test_desc = desc_all[train_length:]
 
     return train_desc.astype(np.float32),train_price.astype(np.float32),test_desc.astype(np.float32)
 
@@ -197,30 +189,11 @@ def write_csv(prices,path):
     csvFile.close()
 
 def main():
+    load_all(80)
 
-    dimension = 80
+    # dimension = 80
+    # train_desc,train_price,test_desc = load_all(dimension)
 
-
-    train_desc,train_price,test_desc = load_all(dimension)
-
-    # # KRR = KernelRidge(alpha=0.6, kernel='polynomial', degree=2, coef0=2.5)
-
-    # kr = GridSearchCV(KernelRidge(kernel='polynomial', gamma=0.1),
-    #                   param_grid={"alpha": [1e0, 0.1, 1e-2, 1e-3],
-    #                               "gamma": np.logspace(-2, 2, 5)})
-
-
-    # kr.fit(train_desc, train_price)
-    # y_kr = kr.predict(test_desc)
-    # for i in range(len(y_kr)):
-    #     y_kr[i] = convert2price(y_kr[i])
-    # # print(y_kr.shape)
-    # print(dimension,evaluation.eval_test(y_kr))
-
-    # write_csv(train_price, './result.csv')
-    # # print(data)
-    # plt.plot(data[1])
-    # plt.show()
 if __name__ == '__main__':
     main()
 
