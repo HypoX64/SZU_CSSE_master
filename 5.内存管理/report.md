@@ -204,7 +204,12 @@ VmFlags: rd ex
 1.每个处理器核上运行的进程使用的是虚地址,每次取指令或数据都需要将程序虚地址转换成物理地址,这需要借助于页表信息来转换.
 
 ### 5.2.2  进程页表
-由于ubuntu下无法安装kernel-debuginfo,下面的内容将在CentOS7中实现
+由于ubuntu下无法安装kernel-debuginfo,下面的内容将在CentOS 7中实现
+* 安装crash
+```bash
+yum install crash
+debuginfo-install kernel
+```
 * 屏显 5-19 show-virt-addr 的输出
 ```bash
 [hypo@localhost code]$ ./show-virt-addr
