@@ -168,6 +168,11 @@ def add_future(features):
 
 
     #random features
+    # random_list =['OverallQual', 'my_Neighborhood', 'GrLivArea', 'ExterQual', 'KitchenQual', 'GarageCars', 
+    # 'GarageArea', 'TotalBsmtSF', '1stFlrSF', 'BsmtQual', 'FullBath', 'my_GarageFinish', 'GarageFinish',
+    #  'TotRmsAbvGrd', 'my_FireplaceQu', 'YearBuilt', 'FireplaceQu', 'YearRemodAdd', 'my_Foundation', 'my_GarageType', 
+    #  'MasVnrArea', 'Fireplaces', 'my_MSSubClass', 'my_HeatingQC', 'HeatingQC', 'my_MasVnrType', 'GarageType', 'BsmtFinSF1']
+
     random_list = ['GrLivArea','OverallQual','2ndFlrSF','YearBuilt','1stFlrSF','TotalBsmtSF','OverallCond',
     'my_Neighborhood','my_SaleCondition','BsmtFinSF1','my_MSZoning','LotArea','GarageCars','YearRemodAdd','GarageArea']
     length = len(random_list)

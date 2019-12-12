@@ -20,10 +20,10 @@ def eval_test(records_predict):
     return RMSE(records_real, records_predict)
 
 def RMSE(records_real,records_predict):
-    # records_real = np.log1p(records_real)
-    # records_predict = np.log1p(records_predict)
-    records_real = dataloader.normlize(np.array(records_real),True)
-    records_predict = dataloader.normlize(np.array(records_predict),True)
+    # records_real = np.log1p(np.array(records_real))
+    # records_predict = np.log1p(np.array(records_predict))
+    records_real = transformer.normlize(np.array(records_real),True)
+    records_predict = transformer.normlize(np.array(records_predict),True)
     if len(records_real) == len(records_predict):
         return math.sqrt(sum([(x - y) ** 2 for x, y in zip(records_real, records_predict)]) / len(records_real))
     else:

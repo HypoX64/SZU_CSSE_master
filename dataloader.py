@@ -3,8 +3,8 @@ import csv
 import numpy as np
 import random
 from sklearn.decomposition import PCA 
-import evaluation
 from description_map import value_map,fix_key,fix_miss,add_future,fix_LotFrontage
+import transformer
 
 # load description_txt
 description_txt = []
@@ -48,19 +48,6 @@ for i in range(len(colon_indexs)-1):
                 Full_map['my_'+desc_key]=my_map
             ori_map[key] = interspace-j-1 #change word to vector
             Full_map[desc_key]=ori_map
-
-
-def normlize(npdata,justprice = False):
-    _min = np.min(npdata)
-    _max = np.max(npdata)
-    if justprice:       
-        _min = 34900.0
-        _max = 755000.0
-    return (npdata-_min)/(_max-_min)
-
-
-def convert2price(tensor):
-    return tensor*(755000.0-34900.0)+34900
 
 def load_train():
     
@@ -159,22 +146,26 @@ def load_all(dimension):
 
     for key in train_desc_map.keys():
         desc_map[key] = np.concatenate((train_desc_map[key],test_desc_map[key]),axis=0)
-        # desc_map[key] = normlize(desc_map[key])
+        # desc_map[key] = transformer.normlize(desc_map[key])
 
     desc_map['LotFrontage'] = fix_LotFrontage(desc_map)
     desc_map['YearBuilt'] = (desc_map['YearBuilt']-1800)/10
     desc_map['YearRemodAdd'] = (desc_map['YearRemodAdd']-1800)/10
     desc_map = add_future(desc_map)
 
+    #normlize description
     for key in desc_map.keys():
-        desc_map[key] = normlize(desc_map[key])
+        desc_map[key] = transformer.normlize(desc_map[key])
 
     desc_all = dict2numpy(desc_map)
 
-    pca=PCA(n_components=dimension)     #加载PCA算法，设置降维后主成分数目为
-    desc_all=pca.fit_transform(desc_all)#对样本进行降维
+    #加载PCA算法，设置降维后主成分数目为dimension
+    pca=PCA(n_components=dimension)     
+    desc_all=pca.fit_transform(desc_all)
 
-    train_price = normlize(np.array(train_price_map['price']),True)
+    #normlize price
+    train_price = transformer.normlize(np.array(train_price_map['price']),True)
+    
     train_desc = desc_all[:train_length]
     test_desc = desc_all[train_length:]
 
@@ -187,6 +178,18 @@ def write_csv(prices,path):
     for i in range(len(prices)):
         writer.writerow([str(i+1461),prices[i]])
     csvFile.close()
+
+
+def load_submission(path):
+    csv_data = []
+    price = []
+    reader = csv.reader(open(path))
+    for line in reader:
+        csv_data.append(line)
+    for i in range(len(csv_data)):
+        if i != 0:
+            price.append(float(csv_data[i][1]))
+    return np.array(price)
 
 def main():
     load_all(80)

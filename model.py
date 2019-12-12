@@ -5,18 +5,50 @@ from torch import nn, optim
 from torch.autograd import Variable
 import torch.nn.functional as F
 
-
+##model1##
 class Linear(nn.Module):
-    def __init__(self, n_feature, n_hidden, n_output):
+    def __init__(self, n_feature):
         super(Linear, self).__init__()
-        self.fc1 = torch.nn.Linear(n_feature, n_hidden)   # hidden layer
-        self.relu = nn.Sigmoid()
-        self.dropout = nn.Dropout(0.2)
-        self.fc2 = torch.nn.Linear(n_hidden, n_output)   # output layer
+        self.fc = nn.Sequential(
+            nn.Linear(n_feature, 256),
+            nn.Sigmoid(),
+            nn.Dropout(0.2)
+        )
+        self.output = nn.Linear(256, 1)   
 
     def forward(self, x):
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.dropout(x)
-        x = self.fc2(x)
+        x = self.fc(x)
+        x = self.output(x) 
         return x
+
+
+class Residual_linear(nn.Module):
+    def __init__(self, n_feature):
+        super(Residual_linear, self).__init__()
+        self.fc = nn.Sequential(
+            nn.Linear(n_feature, 256),
+            nn.ReLU(inplace=True),
+            nn.Linear(256, 1024),
+            nn.ReLU(inplace=True),
+            nn.Linear(1024, 128),
+            nn.ReLU(inplace=True),
+            nn.Dropout(0.2)
+        )
+        self.shortcut = nn.Sequential(
+            nn.Linear(n_feature, 128)
+        )
+        self.output = nn.Sequential(
+            nn.Linear(128, 1)
+        )
+
+
+    def forward(self, x):
+        x_shortcut = self.shortcut(x)
+        x = self.fc(x)
+        x = x+x_shortcut
+        x = torch.sigmoid(x)
+        x = self.output(x)
+        return x
+
+
+

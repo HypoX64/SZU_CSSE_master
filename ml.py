@@ -26,7 +26,7 @@ def eval(model,train_x,train_y,test_x):
     model.fit(train_x, train_y)
     y_pre = model.predict(test_x)
     for i in range(len(y_pre)):
-        y_pre[i] = dataloader.convert2price(y_pre[i])
+        y_pre[i] = transformer.convert2price(y_pre[i])
     return evaluation.eval_test(y_pre),y_pre
     # print(dimension,evaluation.eval_test(y_pre))
 

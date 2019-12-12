@@ -22,3 +22,11 @@ def normlize(npdata,justprice = False):
 
 def convert2price(tensor):
     return tensor*(755000.0-34900.0)+34900
+
+# def normlize(npdata,justprice = False):
+
+#     return np.log1p(npdata)
+
+
+# def convert2price(tensor):
+#     return np.expm1(tensor)
