@@ -341,6 +341,7 @@ model_svr = GridSearchCV(SVR(kernel="rbf"),
 | ![image](./images/0.040413_121_model_xgb.png) | ![image](./images/0.030281_138_ENet.png) |
 | ![image](./images/0.029568_138_bay.png) | ![image](./images/0.036021_82_GBoost.png) |
 | ![image](./images/0.033188_65_model_lgb.png) | ![image](./images/0.028606_114_model_svr.png) |
+
 通过上面的图可以发现PCA的输出维数对于传统的回归模型确实由较大的影响。不同的模型最合适的输出维数并不一样。
 各种模型的最终loss如下：
 
