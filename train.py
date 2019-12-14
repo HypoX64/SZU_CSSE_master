@@ -10,20 +10,20 @@ import matplotlib.pyplot as plt
 
 
 #parameter
-LR = 0.0002
-EPOCHS = 5000
+LR = 0.0001
+EPOCHS = 100
 BATCHSIZE = 64
 CONTINUE = False
 use_gpu = True
-Dimension = 128
+Dimension = 233
 #load data
-train_desc,train_price,test_desc = dataloader.load_all(Dimension)
+train_desc,train_price,test_desc = dataloader.load_all(Dimension,usePCA=False)
 train_desc.tolist()
 train_price.tolist()
 
 #def network
-net = model.Linear(Dimension)
-# net = model.Residual_linear(Dimension)
+# net = model.Linear(Dimension)
+net = model.Residual_linear(Dimension)
 print(net)
 
 if CONTINUE:

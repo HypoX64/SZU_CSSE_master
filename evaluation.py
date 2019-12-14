@@ -32,7 +32,7 @@ def RMSE(records_real,records_predict):
 
 def main():
     # my_price = load_submission('./datasets/sample_submission.csv')
-    my_price = load_submission('./result/keras_untuned.csv')
+    my_price = load_submission('./result/submission/0.02533_merge.csv')
 
     print(eval_test(my_price))
 if __name__ == '__main__':

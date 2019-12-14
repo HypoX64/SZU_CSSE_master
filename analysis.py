@@ -3,6 +3,22 @@ import transformer
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+'''
+base analysis
+'''
+desc_map,price_map = dataloader.load_train()
+plt.scatter(desc_map['YearBuilt'],price_map['price'],s=10)
+plt.title('SalePrice_YearBuilt')
+plt.xlabel('YearBuilt')
+plt.ylabel('SalePrice')
+plt.show()
+print('SalePrice mean:',np.mean(price_map['price']),'median:',np.median(price_map['price']),'std:',np.std(price_map['price']))
+
+
+'''
+corrcoefs analysis
+'''
 corrcoefs = []
 keys = []
 # corrcoefs_map ={}

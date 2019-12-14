@@ -137,7 +137,7 @@ def dict2numpy(dict_data):
         np_data[:,i] = np.array(dict_data[key])
     return np_data
 
-def load_all(dimension):
+def load_all(dimension,usePCA = True):
 
     train_desc_map,train_price_map = load_train()
     test_desc_map = load_test()
@@ -160,8 +160,9 @@ def load_all(dimension):
     desc_all = dict2numpy(desc_map)
 
     #加载PCA算法，设置降维后主成分数目为dimension
-    pca=PCA(n_components=dimension)     
-    desc_all=pca.fit_transform(desc_all)
+    if usePCA:
+        pca=PCA(n_components=dimension)     
+        desc_all=pca.fit_transform(desc_all)
 
     #normlize price
     train_price = transformer.normlize(np.array(train_price_map['price']),True)
