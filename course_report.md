@@ -1,8 +1,8 @@
 [toc]
 ### 1 比赛简介
-​        选择的项目为[House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques),该比赛要求参赛者使用爱荷华州艾姆斯市(Ames, Iowa)所销售房子的描述对其售价进行预测，是典型的回归问题。数据集包含1460个用于训练的房子描述+售价以及1459个用于测试的房子描述，每个对房子描述的描述包含79个标识，比如平方英尺大小，住宅类型，埃姆斯市区范围内的地理位置等。比赛要求对测试集的每个ID的描述给出SalePrice的预测值，评估标准使用预测值的对数与观察到的销售价格的对数之间的均方根误差（RMSE）。
+​        选择的项目为[House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques),该比赛要求参赛者使用爱荷华州艾姆斯市(Ames, Iowa)所销售房子的描述对其售价进行预测，是典型的回归问题。数据集包含1460个用于训练的房子描述+售价以及1459个用于测试的房子描述，每个对房子描述的描述包含79个标识，比如平方英尺大小，住宅类型，埃姆斯市区范围内的地理位置等。比赛要求对测试集的每个ID的描述给出SalePrice的预测值，评估标准使用预测值的对数与观察到的销售价格的对数之间的均方根误差(RMSE）
 <br>
-![image](./images/House Prices.jpg)
+![image](./images/House_Prices.jpg)
 ​        为了实现比赛要求，对数据进行了预处理，特征工程等操作，并搭建了深度神经网络进行回归预测，最终获得前19%的分数。另外，比赛代码公开于[https://github.com/HypoX64/house-prices](https://github.com/HypoX64/house-prices)
 ![image](./images/Ranking_1.jpg)
 
@@ -26,11 +26,11 @@
 
 #### 2.5 实验结果的评价
 
-​        比赛的评估标准使用预测值的对数与观察到的销售价格的对数之间的均方根误差（RMSE）以下公式所示。
+​        比赛的评估标准使用预测值的对数与观察到的销售价格的对数之间的均方根误差（RMSE）以下公式所示。<br>
 $$
 \begin{matrix} \sqrt{\dfrac{\sum_{i=1}^N(\lg y_i-\lg \hat{y_i})^2}{N}} \end{matrix}
 $$
-​        然而由于我首选的是深度学习的方法，对于数值预测类任务其对应loss为MES，不需要对数及根号处理，所以本文中将统一使用下面的loss，值得注意的是这将导致程序跑出来的结果与最终提交结果不一致，但两者是同向的关系，这并不影响对模型效果的评估。
+​        然而由于我首选的是深度学习的方法，对于数值预测类任务其对应loss为MES，不需要对数及根号处理，所以本文中将统一使用下面的loss，值得注意的是这将导致程序跑出来的结果与最终提交结果不一致，但两者是同向的关系，这并不影响对模型效果的评估。<br>
 $$
 \begin{matrix} \dfrac{\sum_{i=1}^N(y_i-\hat{y_i})^2}{N}  \end{matrix}
 $$
@@ -274,6 +274,7 @@ criterion = nn.MSELoss()
 对比浅层神经网络于深层神经网络的结果，可以发现后者网络参数量大，仅仅迭代数十次就出现了过拟合的情况。再者，即使将网络结构精简到只有两层，依然会出现明显的过拟合现象。可见，从某种角度来说，这项比赛的数据量过小，似乎并不适合使用深度神经网络。
 另外，通过对比是否应用PCA对结果的影响，可以发现PCA对于神经网络似乎甚至具有相反的效果。
 最终结果如下：
+
 | 网络类型                     | loss     |
 | ---------------------------- | -------- |
 | 简单的全连接神经网络_withPCA | 0.026172 |
@@ -334,6 +335,7 @@ model_svr = GridSearchCV(SVR(kernel="rbf"),
                               "epsilon":np.logspace(-4, -3, 5)})
 ```
 * PCA维数以及模型loss的关系
+
 | ![image](./images/0.026778_85_krr.png) | ![image](./images/0.030053_137_las.png) |
 | -------------------------------------- | -------------------------------------- |
 | ![image](./images/0.040413_121_model_xgb.png) | ![image](./images/0.030281_138_ENet.png) |

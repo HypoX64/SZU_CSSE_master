@@ -1,6 +1,6 @@
 ### 1 比赛简介
-​        选择的项目为[House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques),该比赛要求参赛者使用爱荷华州艾姆斯市(Ames, Iowa)所销售房子的描述对其售价进行预测，是典型的回归问题。数据集包含1460个用于训练的房子描述+售价以及1459个用于测试的房子描述，每个对房子描述的描述包含79个标识，比如平方英尺大小，住宅类型，埃姆斯市区范围内的地理位置等。比赛要求对测试集的每个ID的描述给出SalePrice的预测值，评估标准使用预测值的对数与观察到的销售价格的对数之间的均方根误差（RMSE）。
-![image](./images/House Prices.jpg)
+​        选择的项目为[House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques),该比赛要求参赛者使用爱荷华州艾姆斯市(Ames, Iowa)所销售房子的描述对其售价进行预测，是典型的回归问题。数据集包含1460个用于训练的房子描述+售价以及1459个用于测试的房子描述，每个对房子描述的描述包含79个标识，比如平方英尺大小，住宅类型，埃姆斯市区范围内的地理位置等。比赛要求对测试集的每个ID的描述给出SalePrice的预测值，评估标准使用预测值的对数与观察到的销售价格的对数之间的均方根误差(RMSE).
+![image](./images/House_Prices.jpg)
 <br>
 ​        为了实现比赛要求，对数据进行了预处理，特征工程等操作，并搭建了深度神经网络进行回归预测，最终获得前19%的分数。
 ![image](./images/Ranking_1.jpg)
