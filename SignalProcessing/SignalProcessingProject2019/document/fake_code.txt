@@ -1,0 +1,61 @@
+Algorithm 1 FullSearch
+"""
+:param fr: the frame need to predict
+:param fr_ref: previous frame
+:param window_size: full search window size
+"""
+Function FullSearch(fr, fr_ref, window_size)
+    for each block in fr:
+        move the block in search area of fr_ref: #base on window_size and block location
+            calculate error()
+        find the best match block
+        replace the fr_block use fr_ref_block
+
+Algorithm 2 ThreeStepSearch
+Function ThreeStepSearch(fr, fr_ref)
+    for each block in fr:
+        original_point = center of block
+        for S in [4,2,1]:
+            points = get search point(S) #8 locations +/- S pixels around original point and the original point
+            for each point in points:
+                calculate error()
+        original_point  = the minimum cost point
+        # replace
+        original_point is the center of best match block
+        replace the fr_block use fr_ref_block
+
+
+Algorithm 3 DiamondSearch
+Function DiamondSearch(fr, fr_ref)
+    for each block in fr:
+        original_point = center of block
+        LDSP:
+            S = 2 
+            search 9 locations pixels (X,Y): #(|X|+|Y|=S) around location original_point and original_point
+                calculate error()
+            original_point  = the minimum cost point
+            if original_point is found at center of search window:
+                goto SDSP
+            else:
+                goto LDSP
+        SDSP:
+            S = 1
+            search 5 locations pixels (X,Y): #(|X|+|Y|=S) around location original_point and original_point
+                calculate error()
+            original_point  = the minimum cost point
+        # replace
+        original_point is the center of best match block
+        replace the fr_block use fr_ref_block
+
+Algorithm 4 MultiStepSearch
+Function MultiStepSearch(fr, fr_ref, step)
+    for each block in fr:
+        original_point = center of block
+        for S in get_S(step):# S = [2^(step-1),2^(step-2)...8,4,2,1]
+            points = get search point(S) #8 locations +/- S pixels around original point and the original point
+            for each point in points:
+                calculate error()
+        original_point  = the minimum cost point
+        # replace
+        original_point is the center of best match block
+        replace the fr_block use fr_ref_block
