@@ -20,7 +20,7 @@ def create_nfa(pattern_string):
 词法分析按照优先级自顶向下
 expr ::= <factor_connect> ("|" factor_connect)*                                  # "|" 加（或）
 factor_connect ::= factor | factor factor*                                       # "" 乘（直接连接）
-factor ::= term | term ("*"|"+")*                                               # "*"闭包  "+"正闭包
+factor ::= term | term ("*"|"+")*                                                # "*"闭包  "+"正闭包
 term ::= char | group | "[" char "-" char "]" | "{" char "," char "}" | "."      # 基本单元,终止符
 group ::= "("expr")"                                                             # 递归解决括号优先级
 """
@@ -40,15 +40,15 @@ def term(nfa_cells):
     """
     对 . | a (单个字符) | 单个一定范围[a-z]的字符 | {a,b,c} 某些字符集合中的单个字符->相当于(a+b+c)
     """
-    if lexer.match(Token.L):             # char
+    if lexer.match(Token.L):                # char
         nfa_single_char(nfa_cells)
-    elif lexer.match(Token.ANY):         # .
+    elif lexer.match(Token.ANY):            # .
         nfa_any_single_char(nfa_cells)
-    elif lexer.match(Token.CCL_START):   # [" char "-" char "]
+    elif lexer.match(Token.SQUARE_START):   # [" char "-" char "]
         nfa_range_single_char(nfa_cells)
-    elif lexer.match(Token.OPEN_CURLY):  # "{" char "," char "}"
+    elif lexer.match(Token.OPEN_CURLY):     # "{" char "," char "}"
         nfa_set_single_char(nfa_cells)
-    elif lexer.match(Token.OPEN_PAREN):  # "("expr")"
+    elif lexer.match(Token.OPEN_PAREN):     # "("expr")"
         group(nfa_cells)
 
 def factor(nfa_cells):
@@ -100,7 +100,7 @@ def expr(nfa_cells):
 
 def nfa_single_char(nfa_cells):
     """
-    L 匹配单个字符
+    L 匹配输入的单个字符
     """
     if not lexer.match(Token.L):
         return False
@@ -117,7 +117,7 @@ def nfa_single_char(nfa_cells):
 
 def nfa_any_single_char(nfa_cells):
     """
-    . 匹配任意单个字符
+    . 匹配单个任意字符
     """
     if not lexer.match(Token.ANY):
         return False
@@ -135,9 +135,9 @@ def nfa_any_single_char(nfa_cells):
 
 def nfa_range_single_char(nfa_cells):
     """
-    [a-z] 匹配范围字符集
+    [a-z] 匹配范围字符集中的单个字符
     """
-    if not lexer.match(Token.CCL_START):
+    if not lexer.match(Token.SQUARE_START):
         return False
     lexer.next()
     start = nfa_cells.start_node = Cell()
@@ -147,7 +147,7 @@ def nfa_range_single_char(nfa_cells):
 
     # get range char set
     first = ''
-    while not lexer.match(Token.CCL_END):
+    while not lexer.match(Token.SQUARE_END):
         if not lexer.match(Token.DASH):
             first = lexer.current_text
             start.char_set.add(first)
@@ -162,7 +162,7 @@ def nfa_range_single_char(nfa_cells):
 
 def nfa_set_single_char(nfa_cells):
     """
-    {a,b,c....} 匹配字符集 相当于(a|b|c...)
+    {a,b,c....} 匹配字符集中的单个字符 相当于(a|b|c...)
     """
     if not lexer.match(Token.OPEN_CURLY):
         return False
@@ -208,7 +208,7 @@ def is_connect_token(token):
         Token.CLOSURE,
         Token.PLUS_CLOSURE,
         Token.CLOSE_CURLY,
-        Token.CCL_END,
+        Token.SQUARE_END,
         Token.OR,
     ]
     return token not in no_connect

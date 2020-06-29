@@ -7,15 +7,16 @@ def match(pattern_string,input_string):
     return         :: True | False
     
     --------------------------------------------------------
-    pattern规则：
+    对应所支持的语法：
     "."       : 用于匹配任意单个字符
+    "c"       : 匹配除了Token以外的输入的字符
     "[a-z]"   : 匹配a-z中的任意单个字符
     "{a,b,c}" : 匹配a或b或c中的任意单个字符，也可以写作(a|b|c)
     "*"       : 闭包
     "+"       : 正闭包
     "|"       : 或(加)
     ""        : 默认进行连接操作(乘)
-
+    "("expr")": 支持使用括号提高运算优先级
     """
     nfa_start_node = builder.create_nfa(pattern_string)
     return run.match(input_string, nfa_start_node)            
@@ -34,6 +35,3 @@ def split(string,keys):
                 out_strings.append(string[cnt:i])
             cnt = i+1
     return out_strings
-
-def replace():
-    pass

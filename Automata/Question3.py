@@ -11,7 +11,6 @@ input_strings = myre.split(input_txt, [' ',',','"','.','(',')'])
 
 pattern = 's{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}*n'
 # 或者 pattern = 's[a-z]*n'
-myre.match
 for string in input_strings:
     if myre.match(pattern, string.lower()):
         print(string)
